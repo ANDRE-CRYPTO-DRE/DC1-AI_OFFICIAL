@@ -11,7 +11,7 @@ export const initializeGemini = () => {
         return;
     }
     genAI = new GoogleGenerativeAI(API_KEY);
-    model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 };
 
 // Default Personas (Fallback)
