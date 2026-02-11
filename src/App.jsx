@@ -103,7 +103,6 @@ const DCSidebar = ({
         </div>
       </div>
 
-      {/* UPDATED: LABEL CHANGED TO "+ New Chat" */}
       <button 
         onClick={createNewChat}
         className="w-full py-3 mb-8 border border-white hover:bg-white hover:text-black transition-all font-black uppercase italic tracking-[0.2em] text-[10px]"
@@ -224,73 +223,81 @@ const ChatInterface = ({ currentChat, setChatHistory, setIsSidebarOpen }) => {
 
   return (
     <div className="flex-1 flex flex-col h-full bg-black relative">
+      {/* HEADER: MOBILE OPTIMIZED */}
       <header className="flex items-center justify-between border-t border-b border-white h-12 md:h-14 bg-black px-0 shrink-0">
-        <div className="flex items-center h-full overflow-hidden">
-          <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 text-white border-r border-white h-full">
+        <div className="flex items-center h-full overflow-hidden flex-1">
+          {/* Hamburger Menu - Fixed Width */}
+          <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 text-white border-r border-white h-full shrink-0">
              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
           </button>
           
-          <div className="flex items-center gap-2 px-3 md:px-5 border-r border-white h-full">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="shrink-0">
+          {/* SESSION ACTIVE - Shrinkable text */}
+          <div className="flex items-center gap-1 md:gap-2 px-1 md:px-5 border-r border-white h-full shrink-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white" className="shrink-0 ml-1">
                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H5v-2h10v2zm4-4H5V8h14v6zM7 10h2v2H7v-2z" />
             </svg>
-            <span className="font-sans font-black text-xs md:text-lg tracking-tighter text-white uppercase whitespace-nowrap">
+            <span className="font-sans font-black text-[9px] md:text-lg tracking-tighter text-white uppercase whitespace-nowrap pr-1">
               SESSION ACTIVE
             </span>
           </div>
 
-          <div className="px-4 md:px-8">
-            <span className="font-serif text-sm md:text-xl text-white/90 uppercase tracking-widest italic">
+          {/* Character Name - Responsive width with truncation */}
+          <div className="px-2 md:px-8 flex-1 min-w-0 overflow-hidden">
+            <span className="font-serif text-xs md:text-xl text-white/90 uppercase tracking-widest italic truncate block">
               {currentChat?.persona}
             </span>
           </div>
         </div>
 
+        {/* Purge Cache - Shrinkable button */}
         <button 
           onClick={() => { if(window.confirm("Purge all local cache?")) { localStorage.clear(); window.location.reload(); } }}
-          className="px-4 md:px-8 text-white uppercase font-bold text-[8px] md:text-[10px] tracking-[0.2em] hover:text-red-500 transition-colors h-full border-l border-white"
+          className="px-2 md:px-8 text-white uppercase font-bold text-[8px] md:text-[10px] tracking-[0.1em] md:tracking-[0.2em] hover:text-red-500 transition-colors h-full border-l border-white shrink-0 whitespace-nowrap"
         >
           Purge Cache
         </button>
       </header>
 
+      {/* CHAT AREA */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-12 space-y-6">
         {currentChat?.messages.length === 0 && (
-          <div className="h-full flex flex-col items-center justify-center opacity-10 text-white font-serif italic text-3xl">
+          <div className="h-full flex flex-col items-center justify-center opacity-10 text-white font-serif italic text-2xl md:text-3xl text-center px-4">
              {getAvatar(currentChat?.persona)}
-             <p className="mt-4 tracking-widest uppercase">Initializing Uplink...</p>
+             <p className="mt-4 tracking-widest uppercase text-sm md:text-base">Initializing Uplink...</p>
           </div>
         )}
         
         {currentChat?.messages.map((msg) => (
-          <div key={msg.id} className={`flex items-start gap-4 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div key={msg.id} className={`flex items-start gap-2 md:gap-4 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
             {msg.sender === 'ai' && (
-              <div className="w-10 h-10 bg-zinc-900 border border-zinc-800 flex items-center justify-center rounded-xl shrink-0">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-zinc-900 border border-zinc-800 flex items-center justify-center rounded-lg md:rounded-xl shrink-0">
                 {getAvatar(currentChat.persona)}
               </div>
             )}
-            <div className={`max-w-[80%] p-4 md:p-6 rounded-2xl text-lg font-serif border whitespace-pre-wrap
+            <div className={`max-w-[85%] md:max-w-[80%] p-3 md:p-6 rounded-2xl text-base md:text-lg font-serif border whitespace-pre-wrap
               ${msg.sender === 'ai' ? 'bg-zinc-900 border-zinc-800 text-zinc-100' : 'bg-white text-black border-white shadow-lg'}`}>
               {msg.text}
             </div>
           </div>
         ))}
-        {isTyping && <div className="text-zinc-600 font-serif italic text-xs ml-14 animate-pulse uppercase tracking-[0.3em]">Processing...</div>}
+        {isTyping && <div className="text-zinc-600 font-serif italic text-[10px] md:text-xs ml-10 md:ml-14 animate-pulse uppercase tracking-[0.3em]">Processing...</div>}
       </div>
 
-      <div className="p-4 md:p-10">
-        <form onSubmit={handleSend} className="max-w-4xl mx-auto bg-white rounded-full flex items-center px-4 md:px-6 py-2 md:py-4 shadow-2xl">
-          <button type="button" className="p-2 text-black opacity-60 hover:opacity-100 transition-opacity">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      {/* INPUT AREA: MOBILE OPTIMIZED */}
+      <div className="p-3 md:p-10">
+        <form onSubmit={handleSend} className="max-w-4xl mx-auto bg-white rounded-full flex items-center px-2 md:px-6 py-1 md:py-4 shadow-2xl">
+          {/* Paperclip */}
+          <button type="button" className="p-1.5 md:p-2 text-black opacity-60 hover:opacity-100 transition-opacity shrink-0">
+            <svg width="18" height="18" md:width="22" md:height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
             </svg>
           </button>
 
-          <button type="button" className="p-2 text-black opacity-60 hover:opacity-100 transition-opacity">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          {/* Microphone */}
+          <button type="button" className="p-1.5 md:p-2 text-black opacity-60 hover:opacity-100 transition-opacity shrink-0">
+            <svg width="18" height="18" md:width="22" md:height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-              <line x1="12" y1="19" x2="12" y2="23" />
             </svg>
           </button>
 
@@ -299,11 +306,12 @@ const ChatInterface = ({ currentChat, setChatHistory, setIsSidebarOpen }) => {
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
             placeholder="Ask something..." 
-            className="flex-1 bg-transparent border-none text-black px-4 text-lg md:text-xl font-serif outline-none placeholder:text-zinc-400" 
+            className="flex-1 bg-transparent border-none text-black px-2 md:px-4 text-sm md:text-xl font-serif outline-none placeholder:text-zinc-400 min-w-0" 
           />
           
-          <button type="submit" disabled={isTyping} className="text-black p-2 hover:scale-110 active:scale-95 transition-transform disabled:opacity-20">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          {/* Send Button */}
+          <button type="submit" disabled={isTyping} className="text-black p-1.5 md:p-2 hover:scale-110 active:scale-95 transition-transform disabled:opacity-20 shrink-0">
+            <svg width="22" height="22" md:width="28" md:height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </form>
       </div>
