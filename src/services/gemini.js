@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = "AIzaSyDjo9nYnEjy-hQ3hl8I9yfi33gFU8k5iXU";
+const API_KEY = "AIzaSyBRhsAAgVuj3r4zhi3hEMNt5frxVKb7Vrg";
 
 let genAI = null;
 let model = null;
@@ -11,7 +11,7 @@ export const initializeGemini = () => {
         return;
     }
     genAI = new GoogleGenerativeAI(API_KEY);
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 };
 
 // Default Personas (Fallback)
@@ -23,15 +23,10 @@ const PERSONAS = {
 
 export const sendMessageToGemini = async (message, history, personaName) => {
     if (!model) initializeGemini();
-    if (!model) return "Error: Gemini API not initialized. Please check API Key.";
+    if (!model) return "Error: Gemini API not initialized. Check API Key.";
 
     try {
         const systemInstruction = PERSONAS[personaName] || "You are a helpful assistant.";
-
-        // Construct the prompt with persona context
-        // Since gemini-pro (free) might not support system_instruction in all regions/versions via this SDK clean method yet,
-        // we prepend it to the chat history or the first message.
-        // However, the best way for a "chat" is to just start a chat session.
 
         const chat = model.startChat({
             history: history.map(msg => ({
@@ -43,9 +38,6 @@ export const sendMessageToGemini = async (message, history, personaName) => {
             }
         });
 
-        // For strong persona adherence, we prepend the instruction to the message if it's a new chat, 
-        // OR we can rely on a system prompt if we were using 1.5 Pro.
-        // For simplicity and robustness with the basic model:
         const promptWithPersona = `[SYSTEM INSTRUCTION: ${systemInstruction}]\n\nUser Message: ${message}`;
 
         const result = await chat.sendMessage(promptWithPersona);
@@ -53,6 +45,7 @@ export const sendMessageToGemini = async (message, history, personaName) => {
         return response.text();
     } catch (error) {
         console.error("Gemini API Error:", error);
-        return "Error: Unable to establish uplink. Systems offline.";
+        // Return the actual error message for debugging
+        return `System Error: ${error.message || "Unknown API Connection Failure"}`;
     }
 };
