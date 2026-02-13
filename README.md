@@ -25,3 +25,6 @@ DC-AI includes multiple character personas, real-time chat interaction, characte
 
 Design:
 The design is inspired by the dark, high-tech atmosphere of Gotham City and follows a Brutalist style with bold white lines, deep black backgrounds, sharp edges, glowing blue frames, and clean circular profiles. This creates a Batcave-like tactical interface that feels simple, fast, and powerful.
+
+Target Users:
+DC-AI is designed for anyone who is a DC fan, especially those who enjoy characters like Batman, Cyborg, and Lex Luthor. It is also ideal for teenagers, senior high school students, and users who love superhero content, roleplay, and interactive entertainment. Anyone interested in AI, character-based chatbots, and fun digital experiences can enjoy using DC-AI.
